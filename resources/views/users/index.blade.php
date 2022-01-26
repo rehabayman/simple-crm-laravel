@@ -44,7 +44,7 @@
                         <td>{{ $user->email }}</td>
                         <td>
                             @can('manage users')
-                                
+                                @if (auth()->user()->id != $user->id)
                                 @if (!$user->deleted_at)
                                     <a class="btn btn-xs btn-info" href="{{ route('users.show', $user) }}">
                                         Show
@@ -62,6 +62,7 @@
                                         @csrf
                                         <input type="submit" class="btn btn-xs btn-secondary" value="Restore">
                                     </form>
+                                @endif
                                 @endif
                             @endcan
                         </td>

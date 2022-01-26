@@ -29,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($clients as $client)
+                @forelse($clients as $client)
                     <tr>
                         <td>{{ $client->company_name }}</td>
                         <td>{{ $client->company_vat }}</td>
@@ -50,7 +50,13 @@
                             @endcan
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4">
+                            No clients yet
+                        </td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
 

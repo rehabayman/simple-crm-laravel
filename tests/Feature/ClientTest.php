@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Client;
+use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,22 +14,18 @@ class ClientTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
+    private $user;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->seed([RolesAndPermissionsSeeder::class, UserSeeder::class]);
+        $this->user = User::whereEmail('admin@admin.com')->first();
     }
 
     public function test_no_clients_yet()
     {
-        $credential = [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
-        ];
-    
-        $response = $this->post('login', $credential);
-
-        $response = $this->get('/clients');
+        $response = $this->actingAs($this->user)->get('/clients');
         
         $response->assertSee('No clients yet');
         
@@ -37,11 +34,6 @@ class ClientTest extends TestCase
 
     public function test_clients_found()
     {
-        $credential = [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
-        ];
-
         $client = Client::create([
             'contact_name' => $this->faker->name(),
             'contact_email' => $this->faker->email(),
@@ -53,9 +45,7 @@ class ClientTest extends TestCase
             'company_vat' => $this->faker->randomNumber(9),
         ]);
 
-        $response = $this->post('login', $credential);
-
-        $response = $this->get('/clients');
+        $response = $this->actingAs($this->user)->get('/clients');
         
         $response->assertDontSee('No clients yet');
         

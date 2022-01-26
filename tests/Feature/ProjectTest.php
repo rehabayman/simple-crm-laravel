@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Project;
+use App\Models\User;
 use Database\Seeders\ClientSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\UserSeeder;
@@ -13,6 +14,8 @@ use Tests\TestCase;
 class ProjectTest extends TestCase
 {
     use RefreshDatabase;
+
+    private $user;
     
     public function setUp(): void
     {
@@ -22,18 +25,13 @@ class ProjectTest extends TestCase
             UserSeeder::class,
             ClientSeeder::class
         ]);
+        
+        $this->user = User::whereEmail('admin@admin.com')->first();
     }
 
     public function test_empty_projects()
     {
-        $credential = [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
-        ];
-    
-        $response = $this->post('login', $credential);
-
-        $response = $this->get('/projects');
+        $response = $this->actingAs($this->user)->get('/projects');
         
         $response->assertSee('No projects yet');
         
@@ -42,16 +40,9 @@ class ProjectTest extends TestCase
 
     public function test_projects_pagination()
     {
-        $credential = [
-            'email' => 'admin@admin.com',
-            'password' => 'password'
-        ];
-    
-        $response = $this->post('login', $credential);
-
         $projects = Project::factory()->count(11)->create();
 
-        $response = $this->get('/projects');
+        $response = $this->actingAs($this->user)->get('/projects');
         
         $response->assertDontSee($projects->last()->name);
         

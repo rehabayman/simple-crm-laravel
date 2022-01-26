@@ -42,6 +42,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('clients.index') }}">{{ __('Clients') }}</a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
+                                </li>
                             @endcan
                         @endauth
                     </ul>

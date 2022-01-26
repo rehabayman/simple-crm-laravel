@@ -31,10 +31,9 @@ class Project extends Model
         'deadline' => 'date',
     ];
 
-    public function getDeadlineAttribute()
+    public function getDeadlineAttribute($value)
     {
-        $deadline = new Carbon($this->deadline);
-
+        $deadline = new Carbon($value);
         return $deadline->format('d/m/Y');
     }
     

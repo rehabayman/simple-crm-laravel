@@ -6,7 +6,6 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use Exception;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {

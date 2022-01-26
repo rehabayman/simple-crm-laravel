@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TermsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::group(['middleware' => ['auth', 'termsAccepted']], function () {
     Route::post('/users/{user}/restore', [UserController::class, 'restore'])->middleware('role:admin')->name('users.restore');
     Route::resource('clients', ClientController::class)->middleware('role:admin');
     Route::resource('users', UserController::class)->middleware('role:admin');
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 });
 
 Route::group(['middleware' => 'auth'], function () {
